@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class MeleeEnemy : MonoBehaviour
 {
-    [SerializeField] private GameObject _player;
     [SerializeField] private float _speed;
     [SerializeField] private float _attackCD;
 
@@ -10,12 +9,19 @@ public class MeleeEnemy : MonoBehaviour
 
     private float _distance;
 
+    private Transform _player;
+
+    private void Awake()
+    {
+        _player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
+
     private void Update()
     {
-        _distance = Vector2.Distance(transform.position, _player.transform.position);
+        _distance = Vector2.Distance(transform.position, _player.position);
 
         transform.position =
-            Vector2.MoveTowards(transform.position, _player.transform.position, _speed * Time.deltaTime);
+            Vector2.MoveTowards(transform.position, _player.position, _speed * Time.deltaTime);
     }
 
     private void OnCollisionStay2D(Collision2D collision)
