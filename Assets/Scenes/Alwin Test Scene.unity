@@ -371,8 +371,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 226c7e43d656743a183902d76f92d02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 350
-  _dashForce: 2500
+  _movementSpeed: 5
+  _dashForce: 25
+  _dashDuration: 0.3
+  _dashCooldown: 2
 --- !u!50 &766287954
 Rigidbody2D:
   serializedVersion: 4
@@ -386,7 +388,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

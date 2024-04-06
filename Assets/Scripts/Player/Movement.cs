@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
     [SerializeField] private float _movementSpeed;
     [SerializeField] private float _dashForce;
+    [SerializeField] private float _dashDuration;
+    [SerializeField] private float _dashCooldown;
+
+    private float _dashDurationCounter, _dashCooldownCounter;
+    private float _currentMoveSpeed;
 
     private Rigidbody2D _rb;
     private Vector2 _input;
@@ -14,25 +17,43 @@ public class Movement : MonoBehaviour
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
+        _currentMoveSpeed = _movementSpeed;
     }
 
     void Update()
     {
-        _input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        _input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
         if (_input.x != 0 || _input.y != 0) _input *= 0.7f;
+        _rb.velocity =  _input * _currentMoveSpeed;
 
+        Dash();
+    }
+
+    void Dash()
+    {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("Dashing");
-            Dash();
+            if (_dashCooldownCounter <= 0 && _dashDurationCounter <= 0)
+            {
+                _currentMoveSpeed = _dashForce;
+                _dashDurationCounter = _dashDuration;
+            }
         }
-    }
+        
+        if (_dashDurationCounter > 0)
+        {
+            _dashDurationCounter -= Time.deltaTime;
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        _rb.velocity = new(_movementSpeed * _input.x * Time.deltaTime, _movementSpeed * _input.y * Time.deltaTime);
-    }
+            if (_dashDurationCounter <= 0)
+            {
+                _currentMoveSpeed = _movementSpeed;
+                _dashCooldownCounter = _dashCooldown;
+            }
+        }
 
-    void Dash() => _rb.AddForce(new Vector2(_dashForce * _input.x, _dashForce * _input.y), ForceMode2D.Force);
+        if (_dashCooldownCounter > 0)
+        {
+            _dashCooldownCounter -= Time.deltaTime;
+        }
+    } 
 }
