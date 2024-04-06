@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -55,5 +56,5 @@ public class Movement : MonoBehaviour
         {
             _dashCooldownCounter -= Time.deltaTime;
         }
-    } 
+    }
 }
